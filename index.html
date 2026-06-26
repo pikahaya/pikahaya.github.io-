@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pikahaya website</title>
+    <style>
+        /* 全体のリセットとダークモードの基本設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #121214;
+            color: #e0e0e6;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+            line-height: 1.6;
+        }
+        a {
+            color: #4da6ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #80c1ff;
+        }
+
+        /* ヘッダー・ナビゲーション */
+        header {
+            background-color: #1a1a1e;
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid #2a2a30;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        /* メインビジュアル（トップ部分） */
+        .hero {
+            text-align: center;
+            padding: 5rem 1rem;
+            background: linear-gradient(180deg, #1a1a1e 0%, #121214 100%);
+        }
+        .hero h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        /* コンテンツエリア共通 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+        section {
+            margin-bottom: 4rem;
+            background-color: #1a1a1e;
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid #2a2a30;
+        }
+        section h3 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #4da6ff;
+            padding-left: 0.75rem;
+        }
+
+        /* プロフィール（自己紹介）のスタイル */
+        .profile-box p {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .profile-box strong {
+            color: #4da6ff;
+            display: inline-block;
+            width: 90px;
+        }
+
+        /* リンク一覧のスタイル */
+        .link-list {
+            list-style: none;
+            display: grid;
+            gap: 1rem;
+        }
+        .link-item a {
+            display: block;
+            background-color: #222227;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #33333a;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .link-item a:hover {
+            background-color: #2a2a32;
+            transform: translateX(5px);
+        }
+
+        /* お問い合わせフォーム */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #121214;
+            border: 1px solid #33333a;
+            border-radius: 4px;
+            color: #e0e0e6;
+            font-size: 1rem;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4da6ff;
+        }
+        .submit-btn {
+            background-color: #4da6ff;
+            color: #121214;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #80c1ff;
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #1a1a1e;
+            font-size: 0.85rem;
+            border-top: 1px solid #2a2a30;
+            color: #777780;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>pikahaya website</h1>
+        <nav>
+            <ul>
+                <li><a href="#about">自己紹介</a></li>
+                <li><a href="#links">リンク</a></li>
+                <li><a href="chat.html">チャット</a></li> <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h2>Welcome to pikahaya website</h2>
+        <p>各種コンテンツへのリンクやプロフィールをまとめています。</p>
+    </div>
+
+    <div class="container">
+
+        <section id="about">
+            <h3>自己紹介</h3>
+            <div class="profile-box">
+                <p><strong>名前：</strong>pikahaya</p>
+                <p><strong>誕生日：</strong>7月10日</p>
+                <p><strong>一言：</strong>YouTubeやってます！よろしくお願いします！</p>
+            </div>
+        </section>
+
+        <section id="links">
+            <h3>リンク</h3>
+            <ul class="link-list">
+                <li class="link-item"><a href="https://www.youtube.com/@pikahaya_sanYTnanoda" target="_blank">YouTube チャンネル 🔗</a></li>
+                <li class="link-item"><a href="https://www.twitch.tv/pikahaya_sanda" target="_blank">Twitch 🔗</a></li>
+                <li class="link-item"><a href="https://discord.gg/5Y7D5C9xYj" target="_blank">Discordサーバー 🔗</a></li>
+                <li class="link-item"><a href="https://bsky.app/profile/pikahayasanyt.bsky.social" target="_blank">BlueSky 🔗</a></li>
+                <li class="link-item"><a href="https://www.youtube.com/@konnpakusenseiPCkyousitu" target="_blank">魂魄妖夢先生のPC教室 🔗</a></li>
+            </ul>
+        </section>
+
+        <section id="contact">
+            <h3>お問い合わせ</h3>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">お名前 / ニックネーム</label>
+                    <input type="text" id="name" name="name" required placeholder="お名前を入力してください">
+                </div>
+                <div class="form-group">
+                    <label for="email">メールアドレス</label>
+                    <input type="email" id="email" name="email" required placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="message">お問い合わせ内容</label>
+                    <textarea id="message" name="message" rows="5" required placeholder="メッセージを入力してください"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">送信する</button>
+            </form>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 pikahaya website. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

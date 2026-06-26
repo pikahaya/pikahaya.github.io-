@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リアルタイム通信チャットログ</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #eef2f7;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        h2 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        /* チャット表示エリア */
+        #chat-container {
+            width: 100%;
+            max-width: 500px;
+            height: 450px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        /* メッセージの共通スタイル */
+        .message-box {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-text {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-break: break-all;
+        }
+        .timestamp {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+            padding: 0 5px;
+        }
+        /* 自分（右側・青） */
+        .user {
+            align-items: flex-end;
+        }
+        .user .message-text {
+            background-color: #0084ff;
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+        /* 他人（左側・グレー） */
+        .other {
+            align-items: flex-start;
+        }
+        .other .message-text {
+            background-color: #e4e6eb;
+            color: black;
+            border-bottom-left-radius: 2px;
+        }
+
+        /* 入力エリア */
+        .controls {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+        input[type="text"]:focus {
+            border-color: #0084ff;
+        }
+        button {
+            padding: 0 20px;
+            background-color: #0084ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0066cc;
+        }
+
+        /* 改良：ホームに戻るナビゲーション部分 */
+        .navigation {
+            width: 100%;
+            max-width: 500px;
+        }
+        .home-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            background-color: #222222; /* 落ち着いたダークカラーで他のボタンと差別化 */
+            color: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .home-link:hover {
+            background-color: #444444;
+        }
+        .home-link:active {
+            transform: scale(0.98); /* クリックしたときに少しへこむアニメーション */
+        }
+    </style>
+</head>
+<body>
+
+    <h2>リアルタイム通信チャット</h2>
+    <div class="subtitle">※このファイルを2つのタブで開くと、間で通信テストができます</div>
+
+    <div id="chat-container"></div>
+
+    <div class="controls">
+        <input type="text" id="message-input" placeholder="メッセージを入力...">
+        <button id="send-btn">送信</button>
+    </div>
+
+    <div class="navigation">
+        <a href="index.html" class="home-link">
+            <span>🏠</span> ホーム画面に戻る
+        </a>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // 【通信の核心】'chat_channel' という名前の通信部屋（チャンネル）を作成
+        const bc = new BroadcastChannel('chat_channel');
+
+        // メッセージを画面に追加する関数
+        function addMessage(text, sender = 'user') {
+            if (!text.trim()) return;
+
+            const msgBox = document.createElement('div');
+            msgBox.classList.add('message-box', sender);
+
+            const msgText = document.createElement('div');
+            msgText.classList.add('message-text');
+            msgText.innerText = text;
+
+            const timeStamp = document.createElement('div');
+            timeStamp.classList.add('timestamp');
+            const now = new Date();
+            timeStamp.innerText = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            msgBox.appendChild(msgText);
+            msgBox.appendChild(timeStamp);
+            chatContainer.appendChild(msgBox);
+
+            // 自動スクロール
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // 自分が手動で送信ボタンを押したときの処理
+        function handleSend() {
+            const text = messageInput.value;
+            if(text) {
+                // 1. 自分の画面（右側）にログを追加
+                addMessage(text, 'user'); 
+                
+                // 2. 【通信】別のタブ（他人）に向けてメッセージを送信
+                bc.postMessage({ text: text });
+
+                messageInput.value = '';  
+            }
+        }
+
+        // 【通信受信イベント】別のタブからメッセージが「通信」で届いた時
+        bc.onmessage = (event) => {
+            // 届いたデータを他人（左側）のログとして自動追加
+            addMessage(event.data.text, 'other');
+        };
+
+        // イベント登録
+        sendBtn.addEventListener('click', handleSend);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+        // 初期メッセージ
+        window.onload = () => {
+            addMessage("チャットルームに接続しました（通信待機中）", "other");
+        };
+    </script>
+</body>
+</html>
